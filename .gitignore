@@ -31,6 +31,7 @@
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
+# Just ignore the folder - im not fancy enough yet to worry about custom IDE settings.
 .idea
 .idea/artifacts
 .idea/compiler.xml
