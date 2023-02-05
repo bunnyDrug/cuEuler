@@ -7,6 +7,7 @@ using namespace std;
 __global__
 void gpuFactor(uint *x) {
     uint tid = threadIdx.x + blockIdx.x * blockDim.x;
+    if (tid == 0) { return; }
 
     if (tid % 3 == 0 || tid % 5 == 0) {
         x[tid] = tid;
