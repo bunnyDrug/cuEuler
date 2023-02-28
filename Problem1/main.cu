@@ -6,8 +6,8 @@ using namespace std;
 
 #define LIMIT 1000
 
-__global__ void gpuFactor(int *x) {
-    int tid = threadIdx.x + blockIdx.x * blockDim.x;
+__global__ void gpuFactor(unsigned int *x) {
+    unsigned int tid = threadIdx.x + blockIdx.x * blockDim.x;
 
     if (tid == 0 || tid > LIMIT) { return; }
 
@@ -19,7 +19,7 @@ __global__ void gpuFactor(int *x) {
 int main() {
 
     // allocate memory on the GPU
-    int *device_a;
+    unsigned int *device_a;
     cudaMalloc((void **) &device_a, LIMIT * sizeof(int));
 
     // run kernel

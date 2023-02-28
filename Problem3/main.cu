@@ -3,20 +3,39 @@
 
 using namespace std;
 
-#define phi 1.61803398
+#define N 10
 
-// I do not think this solution can be done more efficiently on the GPU
-int main() {
-    // create numbers
+__global__ void createSieve(int* x) {
+    int tid = threadIdx.x;
 
-    // check for primality
+    int start = 2;
 
-    // result - check for factors
-
-    // get max from result.
+sieve:
+    if (x[tid] != 0 && x[tid] % start == 0) {
+        x[tid] = 0;
+    }
+    cudaDeviceSynchronize();
+    for (int i = 0; i < N; i ++) {
+        if (x[i] > start && x[i] != 0) {
+            start = x[i];
+            goto sieve;
+        }
+    }
 }
-    2     3     4     5     6
- [i%2=1] [i%2] [i%2] [i%2] [i%2]
-    |      |     x     |     x
 
-    thread
+int main() {
+    // allocate memory on the GPU
+    int *device_a;
+    cudaMalloc((void **) &device_a, N * sizeof(int));
+
+    // run kernel
+    createSieve<<<1, 10>>>(device_a);
+
+    // Copy memory from GPU back to CPU and store it in host_a
+    int host_a[N];
+    cudaMemcpy(host_a, device_a, N * sizeof(int), cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaFree(device_a);
+
+    cout << host_a << endl;
+}
